@@ -1,0 +1,48 @@
+javascript: (function() {
+    function filterOnlineList() {
+        let lis = document.querySelectorAll(".job-card-wrapper");
+        for (let i = 0; i < lis.length; i++) {
+            let online = lis[i].querySelector('.boss-online-tag');
+            if (!online) {
+                lis[i].style.display = 'none'
+            }
+        }
+        alertBox('过滤成功');
+    }
+    function alertBox(msg) {
+        var div = document.createElement('div');
+        div.style.position = 'fixed';
+        div.style.top = '20%';
+        div.style.left = '50%';
+        div.style.transform = 'translate(-50%, -50%)';
+        div.style.backgroundColor = 'rgb(0 190 189)';
+        div.style.borderRadius = '5px';
+        div.style.color = '#fff';
+        div.style.zIndex = 9999;
+        div.style.padding = '20px 100px';
+        div.style.fontSize = '20px';
+        div.style.boxShadow = '0px 0px 10px rgba(0,0,0,.2)';
+        div.innerHTML = msg;
+        document.body.appendChild(div);
+        setTimeout(function() {
+            document.body.removeChild(div);
+        },
+        1000);
+    }
+    function reBindClick() {
+        let pages = document.querySelectorAll('.options-pages a');
+        console.log("因为分页每次点击都会重新渲染，所以需要点击后用定时器重新触发绑定点击事件，不然点击后就没有点击事件监听了");
+        for (let i = 0; i < pages.length; i++) {
+            pages[i].addEventListener('click',
+            function() {
+                setTimeout(function() {
+                    reBindClick();
+                    filterOnlineList();
+                },
+                1000);
+            })
+        }
+    }
+    reBindClick();
+    filterOnlineList();
+})()
